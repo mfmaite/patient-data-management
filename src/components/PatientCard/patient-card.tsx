@@ -29,16 +29,20 @@ const PatientCard = ({ patient }: PatientCardProps) => {
       <motion.img
         src={patient.avatar ? patient.avatar : defaultImg}
         onError={handleImageError}
-        className="w-20 h-20 object-cover rounded-full"
-        initial={{ height: '75px', width: '75px' }}
-        animate={{ height: isOpen ? '130px' : '75px', width: isOpen ? '130px' : '75px' }}
+        className="object-cover rounded-full"
+        initial={{ height: '65px', width: '65px' }}
+        animate={{ height: isOpen ? '150px' : '65px', width: isOpen ? '150px' : '65px' }}
       />
 
       <div className="ml-4 w-full">
         <div className="w-full flex flex-row justify-between">
           <div className="flex items-center">
             <h6 className="h6">{patient.name}</h6>
-            <button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
+            >
               <EditSVG className="ml-2 w-3 h-3" />
             </button>
           </div>
