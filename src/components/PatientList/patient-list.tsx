@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 import { notifyError } from 'utils/app-error';
 import { Patient } from 'network/types/patient';
+import { Button } from 'components/Button/button';
+import { Spinner } from 'components/Spinner/spinner';
 import { PatientController } from 'network/patient-controller';
 import { PatientCard } from 'components/PatientCard/patient-card';
 
 import { ReactComponent as AddSVG } from 'assets/icons/add.svg';
-import { Button } from 'components/Button/button';
 
 
 const PatientList = () => {
@@ -28,6 +29,8 @@ const PatientList = () => {
   useEffect(() => {
     getPatients();
   }, []);
+
+  if (loading) return <Spinner />
 
   return (
     <div>
