@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import { notifyError } from 'utils/app-error';
+import { notifyError, notifySuccess } from 'utils/app-error';
 import { Patient } from 'network/types/patient';
 import { Button } from 'components/Button/button';
 import { Spinner } from 'components/Spinner/spinner';
+import { PatientModal } from 'components/Modals/patient-modal';
 import { PatientController } from 'network/patient-controller';
 import { PatientCard } from 'components/PatientCard/patient-card';
 
 import { ReactComponent as AddSVG } from 'assets/icons/add.svg';
-import { NewPatientModal } from 'components/Modals/new-patient-modal';
 
 const initialPatient: Patient = {
   id: '',
@@ -21,8 +21,8 @@ const initialPatient: Patient = {
 
 const PatientList = () => {
   const [loading, setLoading] = useState(false);
-  const [newPatient, setNewPatient] = useState<Patient | undefined>(undefined);
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [newPatient, setNewPatient] = useState<Patient | undefined>(undefined);
 
   const getPatients = async () => {
     setLoading(true);
@@ -43,6 +43,30 @@ const PatientList = () => {
       notifyError('Error creating new patient');
     } finally {
       setNewPatient(undefined);
+    }
+  }
+
+  const editPatient = (editedPatient: Patient) => {
+    try {
+      const res = patients.map((patient) => {
+        if (patient.id !== editedPatient.id) return patient;
+        return editedPatient;
+      });
+      setPatients(res);
+
+      notifySuccess('The patient was edited successfully');
+    } catch {
+      notifyError('Error editing patient');
+    }
+  }
+
+  const deletePatient = (deletedPatient: Patient) => {
+    try {
+      const res = patients.filter((patient) => patient.id !== deletedPatient.id);
+      setPatients(res);
+      notifySuccess('The patient was deleted successfully');
+    } catch {
+      notifyError('Error editing patient');
     }
   }
 
@@ -70,6 +94,8 @@ const PatientList = () => {
             <PatientCard
               key={patient.id}
               patient={patient}
+              onEdit={editPatient}
+              onDelete={deletePatient}
             />
           ))}
         </div>
@@ -79,7 +105,8 @@ const PatientList = () => {
         </div>
       )}
 
-      <NewPatientModal
+      <PatientModal
+        title="New Patient"
         patient={newPatient}
         setPatient={setNewPatient}
         onClose={() => setNewPatient(undefined)}

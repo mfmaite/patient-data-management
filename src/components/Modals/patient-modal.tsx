@@ -1,4 +1,4 @@
-import React, { Dispatch, FormEventHandler, SetStateAction, useState } from 'react';
+import React, { Dispatch, FormEventHandler, SetStateAction } from 'react';
 
 import { Modal } from './modal';
 import { Input } from 'components/Input/input';
@@ -7,17 +7,20 @@ import { Button } from 'components/Button/button';
 import { TextArea } from 'components/TextArea/text-area';
 
 import { ReactComponent as SaveSVG } from 'assets/icons/save.svg';
+import { ReactComponent as DeleteSVG } from 'assets/icons/delete.svg';
 
-type NewPatientModalProps = {
+type PatientModalProps = {
+  title?: string;
   onClose: () => void;
   patient?: Patient;
   setPatient: Dispatch<SetStateAction<Patient | undefined>>;
   onSubmit: () => void;
+  onDelete?: Dispatch<SetStateAction<boolean>>;
 }
 
-const NewPatientModal = ({
-  onClose, patient, setPatient, onSubmit,
-}: NewPatientModalProps) => {
+const PatientModal = ({
+  title, onClose, patient, setPatient, onSubmit, onDelete,
+}: PatientModalProps) => {
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     if (!!patient?.name && !!patient?.description && !!patient?.avatar && !!patient?.website) {
@@ -28,7 +31,7 @@ const NewPatientModal = ({
     <Modal
       isOpen={!!patient}
       onClose={onClose}
-      title="New Patient"
+      title={title}
       className="w-2/5 h-fit"
     >
       <form onSubmit={handleSubmit}>
@@ -69,7 +72,19 @@ const NewPatientModal = ({
           error={!patient?.description ? "This field is required" : ''}
         />
 
-        <div className="mt-4 flex justify-end">
+        <div className={`mt-4 flex ${onDelete ? 'justify-between' : 'justify-end'}`}>
+          {onDelete && (
+            <Button
+              onClick={() => {
+                setPatient(undefined);
+                onDelete(true);
+              }}
+              type="button"
+            >
+              <DeleteSVG className="mr-2 w-4 h-4" />
+              Delete
+            </Button>
+          )}
           <Button
             onClick={handleSubmit}
           >
@@ -82,4 +97,4 @@ const NewPatientModal = ({
   )
 }
 
-export { NewPatientModal };
+export { PatientModal };
