@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 
+import useIsMobile from 'hooks/useIsMobile';
 import { Patient } from 'network/types/patient';
 import { Modal } from 'components/Modals/modal';
 import { Button } from 'components/Button/button';
@@ -18,6 +19,8 @@ type PatientCardProps = {
 }
 
 const PatientCard = ({ patient, onEdit, onDelete }: PatientCardProps) => {
+  const { isMobile } = useIsMobile();
+
   const [isOpen, setOpen] = useState(false);
   const [editPatient, setEditPatient] = useState<Patient | undefined>(undefined);
   const [confirmationModal, setConfirmationModal] = useState(false);
@@ -39,7 +42,9 @@ const PatientCard = ({ patient, onEdit, onDelete }: PatientCardProps) => {
           onError={handleImageError}
           className="object-cover rounded-full"
           initial={{ height: '65px', width: '65px' }}
-          animate={{ height: isOpen ? '150px' : '65px', width: isOpen ? '150px' : '65px' }}
+          animate={{
+            height: isMobile ? '65px' : isOpen ? '150px' : '65px',
+            width: isMobile ? '65px' : isOpen ? '150px' : '65px' }}
         />
 
         <div className="ml-4 w-full">
@@ -67,12 +72,12 @@ const PatientCard = ({ patient, onEdit, onDelete }: PatientCardProps) => {
             animate={{ opacity: isOpen ? 1 : 0, height: isOpen ? 'auto' : 0 }}
             className="overflow-hidden text-start mt-2"
           >
-            <div className="flex">
+            <div className={`flex mt-2 ${isMobile && 'flex-col'}`}>
               <h6 className="w-2/12 font-semibold">Description:</h6>
               <div className="w-10/12">{patient.description}</div>
             </div>
 
-            <div className="flex mt-2">
+            <div className={`flex mt-2 ${isMobile && 'flex-col'}`}>
               <h6 className="w-2/12 font-semibold">Website:</h6>
               <a className="w-10/12 text-blue-500 underline" href={patient.website}>{patient.website}</a>
             </div>
@@ -96,7 +101,7 @@ const PatientCard = ({ patient, onEdit, onDelete }: PatientCardProps) => {
       <Modal
         isOpen={confirmationModal}
         onClose={() => setConfirmationModal(false)}
-        className="flex flex-col items-center justify-center w-1/3 text-center"
+        className="flex flex-col items-center justify-center md:w-1/3 w-[90vw] text-center"
       >
         <WarningSVG className="w-20 h-20" />
         <h5 className="h5 mb-4">{patient.name}</h5>

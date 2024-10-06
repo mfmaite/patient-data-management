@@ -33,7 +33,7 @@ const Modal = ({
             exit={{ opacity: 0 }}
             className={`
               ${styles.modal}
-              bg-blue-50 rounded-lg p-7
+              bg-blue-50 rounded-lg p-7 z-10
               ${className}
             `}
           >

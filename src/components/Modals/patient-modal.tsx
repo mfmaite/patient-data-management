@@ -8,6 +8,7 @@ import { TextArea } from 'components/TextArea/text-area';
 
 import { ReactComponent as SaveSVG } from 'assets/icons/save.svg';
 import { ReactComponent as DeleteSVG } from 'assets/icons/delete.svg';
+import useIsMobile from 'hooks/useIsMobile';
 
 type PatientModalProps = {
   title?: string;
@@ -21,6 +22,8 @@ type PatientModalProps = {
 const PatientModal = ({
   title, onClose, patient, setPatient, onSubmit, onDelete,
 }: PatientModalProps) => {
+  const { isMobile } = useIsMobile();
+
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
     if (!!patient?.name && !!patient?.description && !!patient?.avatar && !!patient?.website) {
@@ -32,7 +35,7 @@ const PatientModal = ({
       isOpen={!!patient}
       onClose={onClose}
       title={title}
-      className="w-2/5 h-fit"
+      className={`h-fit ${isMobile ? 'w-[90vw]' : 'w-2/5'}`}
     >
       <form onSubmit={handleSubmit}>
         <Input
