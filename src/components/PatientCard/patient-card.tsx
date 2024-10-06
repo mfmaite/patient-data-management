@@ -20,11 +20,10 @@ const PatientCard = ({ patient }: PatientCardProps) => {
   };
 
   return (
-    <motion.button
+    <motion.div
       initial={{ height: 'auto' }}
       animate={{ height: 'auto' }}
       className="w-full flex bg-blue-100 p-5 rounded-xl shadow-lg text-start"
-      onClick={() => setOpen((prevState) => !prevState)}
     >
       <motion.img
         src={patient.avatar ? patient.avatar : defaultImg}
@@ -47,11 +46,12 @@ const PatientCard = ({ patient }: PatientCardProps) => {
             </button>
           </div>
 
-          <motion.div
+          <motion.button
+            onClick={() => setOpen((prevState) => !prevState)}
             animate={{ transform: isOpen ? 'rotate(-180deg)' : 'rotate(0deg)' }}
           >
             <ChevronDownSVG className="w-5 h-5" />
-          </motion.div>
+          </motion.button>
         </div>
         <span className="text-sm text-gray-600 text-start">Created on: {patient.createdAt.toDateString()}</span>
 
@@ -71,7 +71,7 @@ const PatientCard = ({ patient }: PatientCardProps) => {
           </div>
         </motion.div>
       </div>
-    </motion.button>
+    </motion.div>
   )
 }
 

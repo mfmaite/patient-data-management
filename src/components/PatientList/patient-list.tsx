@@ -8,10 +8,20 @@ import { PatientController } from 'network/patient-controller';
 import { PatientCard } from 'components/PatientCard/patient-card';
 
 import { ReactComponent as AddSVG } from 'assets/icons/add.svg';
+import { NewPatientModal } from 'components/Modals/new-patient-modal';
 
+const initialPatient: Patient = {
+  id: '',
+  name: '',
+  description: '',
+  avatar: '',
+  website: '',
+  createdAt: new Date(),
+}
 
 const PatientList = () => {
   const [loading, setLoading] = useState(false);
+  const [newPatient, setNewPatient] = useState<Patient | undefined>(undefined);
   const [patients, setPatients] = useState<Patient[]>([]);
 
   const getPatients = async () => {
@@ -26,6 +36,16 @@ const PatientList = () => {
     }
   }
 
+  const addPatient = () => {
+    try {
+      if (newPatient) setPatients([ ...patients, newPatient ]);
+    } catch {
+      notifyError('Error creating new patient');
+    } finally {
+      setNewPatient(undefined);
+    }
+  }
+
   useEffect(() => {
     getPatients();
   }, []);
@@ -37,7 +57,7 @@ const PatientList = () => {
       <div className="flex justify-between items-center">
         <h1 className="mb-4 h1">Patients List</h1>
         <Button
-
+          onClick={() => setNewPatient(initialPatient)}
         >
           <AddSVG className="mr-2 w-4 h-4" />
           New Patient
@@ -58,6 +78,13 @@ const PatientList = () => {
           <EmptyPage />
         </div>
       )}
+
+      <NewPatientModal
+        patient={newPatient}
+        setPatient={setNewPatient}
+        onClose={() => setNewPatient(undefined)}
+        onSubmit={addPatient}
+      />
     </div>
   )
 }
