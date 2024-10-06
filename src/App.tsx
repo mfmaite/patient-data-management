@@ -6,7 +6,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return (
-    <div>
+    <div className="max-w-screen h-screen py-6 px-8 bg-blue-10">
       <PatientList />
 
       <ToastContainer

@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+$headers: (
+  h1: 40px,
+  h2: 36px,
+  h3: 32px,
+  h4: 28px,
+  h5: 24px,
+  h6: 20px,
+);
+
+@each $heading, $size in $headers {
+  $class-name-heading: '.#{$heading}';
+
+  #{$class-name-heading} {
+    color: #363636;
+    font-family: "PT Serif", serif;
+    font-weight: 700;
+    line-height: normal;
+    font-size: $size;
+  }
+}
